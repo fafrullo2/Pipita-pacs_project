@@ -8,5 +8,5 @@ The chosen project is project #50, "Development of an interactive 2D application
 I will implement a simple application in which the user will use a Kinect ( model 1414) to interact with a game similar to Breakout: the player will control the moving bar with his/her hands.
 Both the graphics and the interaction with the Kinect hardware will be handled via the libraries provided by openframeworks.
 
-Currently the project is being developed on VisualStudio within a Windows 10 environment
+Currently the project is being developed in Netbeans IDE within an Ubuntu environment
 
