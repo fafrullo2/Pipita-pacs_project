@@ -1,0 +1,94 @@
+\documentclass[]{article}
+\usepackage{fancyhdr}
+
+
+%opening
+\title{APCS project, A.Y. 2019-2020\\Project proposal \#50:"Development of an interactive 2D application with  OpenFrameworks"}
+\author{Antonio Pipita}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{Introduction}
+\subsection{Purpose}
+This project consists in developing an application that enables the user to interact with a 2D environment via video feed.\\
+In particular, the user will control via hand motion a component of a simple game: the goal of the player is to destroy a brick wall by making a ball bounce into it, while avoiding to make the ball fall off the screen. In order to do so, the player will move a bar at the bottom of the playfield via motion control.\\
+The video feed will be captured via a Microsoft Kinect, mod. 1414\\
+\subsection{Acronyms and abbreviations}
+\subsection{Revision History}
+\subsection{Document Structure}
+\begin{itemize}
+	\item Introduction: general overview of the system tbd
+	\item Requirement Analysis and Satisfiability: analysis of requirements, goals and domain assumptions of the system tbd
+	\item Design: analysis of the design choices of the system
+\end{itemize}
+\newpage
+\section {Requirement Analysis and Satisfiability}
+\subsection{Chapter Overview}
+\subsection{Scope}
+\subsection{Goals, Requirements and Domain Assumptions}
+In this section the Goals, Requirements and Domain Assumption of application, as well as their relationship, will be presented
+\subsubsection{Goals}
+\begin{itemize}
+	\item Goal 1: user's hand movement must be recognised as input
+	\item Goal 2: the input must impact on the game environment
+\end{itemize}
+\subsubsection{Requirements}
+\begin{itemize}
+	\item Requirement 1: the system must track the player's hands
+	\item Requirement 2: player's hands movement must be translated into bar movement
+	\item Requirement 3: the ball entity must react to impact
+	\item Requirement 4: the system must register ball-to-bricks impact
+	\item Requirement 5: the system must register ball-to-boundaries impact
+	\item Requirement 6: the system must register ball-to bar impact
+	\item Requirement 7: the system must register the ball falling out of the playfield
+	\item Requirement 8: the system must register the complete wall destruction 
+\end{itemize}
+\subsubsection{Domain Assumptions}
+\begin{itemize}
+	\item Domain Assumption 1: the user must be in possession of a functioning Microsoft Kinect model 1414 
+\end{itemize}
+\subsubsection{Requirements to Goals mapping}
+\begin{itemize}
+	\item G1:
+	\begin{itemize}
+		\item R1
+		\item R2
+	\end{itemize}
+	\item G2:
+	\begin{itemize}
+		\item R3
+		\item R4
+		\item R5
+		\item R6
+		\item R7
+		\item R8
+	\end{itemize}
+\end{itemize}
+
+
+\subsection{Class Diagram}
+\subsection{State Charts}
+\subsection{Hardware Interfaces}
+\subsection{Software Interfaces}
+\subsection{Scenarios}
+\subsection{Use Cases}
+\subsubsection{Use Cases Descriptions}
+\subsubsection{Use Cases Diagrams}
+\subsection{Sequence Diagrams}
+\subsection{Performance}
+\newpage
+\section{Application Design}
+\subsection{Chapter Overview}
+
+\subsection{Architectural design}
+\subsection{Components View}
+\subsection{Deployment View}
+\subsection{Runtime View}
+\subsection{Architectural and Implementative Styles and Patterns}
+\subsection{Requirements Traceability}
+\subsection{Implementation and Integration}
+\end{document}
