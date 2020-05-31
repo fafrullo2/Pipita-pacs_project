@@ -5,8 +5,9 @@
 #include "bar.h"
 #include "ball.h"
 #include "brick.h"
-#include "../message_manager.h"
-#include "../map_wrapper.h"
+#include "message_manager.h"
+#include "map_wrapper.h"
+#include "unordered_map_wrapper.h"
 
 #include <mutex>
 
@@ -17,8 +18,8 @@
 
 class game_field {
 private:
-    std::unordered_map<int, game_object*> elems;//<ID,pointer>
-    map_wrapper bricks_map; //<Y<X,ID>>
+    unordered_map_wrapper elems;//<ID,pointer>
+    map_wrapper bricks_map; //[Y,X]=ID
     
     int ball_ID;
     int bar_ID;
@@ -41,6 +42,11 @@ public:
     void add_element(brick* b);
     void push_message(message msg){
         message_queue.push(msg);
+    }
+    
+    game_field(){
+        //elems=unordered_map_wrapper();
+        //bricks_map=map_wrapper();
     }
     
     float check_for_impact(float X, float Y);
