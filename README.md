@@ -13,7 +13,7 @@ At the current stage the application grants the possibility to, first, regulate 
 Currently I am working on the possibility to play again without exiting from the application and on optimization issues.
 
 In order for the application to work openframeworks is needed, as well as the ofxKinect addon (https://openframeworks.cc/), follow the instruction provided in the website to install it.
-In order for ofxKinect to work the libraries and drivers provided by Openkinect (https://openkinect.org/wiki/Getting_Started).
+In order for ofxKinect to work the libraries and drivers provided by Openkinect (https://openkinect.org/wiki/Getting_Started) are required.
 
 Note that the application has been developed for the usage of the kinect model 1414, thus I cannot guarantee anything about wether it works with more recent models or not. 
 
