@@ -28,7 +28,6 @@ class ofApp : public ofBaseApp{
 	private:
 		game_field* field;
 		ofxKinect camera;
-		int update_cycle=0; //one every five ticks
-		bool setup__var=true, endgame=false, chose=false, play_again=false;
+		bool setup__var=true, endgame=false, chose=false, play_again=false, update_cycle=true;
 		float alpha=0;
 };

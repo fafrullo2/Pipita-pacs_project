@@ -1,8 +1,7 @@
 #include "game_field.h"
 #include <math.h>
 #include <iostream>
-#include <chrono>
-#include <thread>
+
 
 
 game_field::~game_field(){
@@ -24,34 +23,34 @@ float game_field::rotate_y(float x_comp, float y_comp, float alpha){
 }
 
 void game_field::check_bound_r(){
-    if(bar_coords.first+play_bar.x()+0.5<=20)
-        bar_coords.first+=0.5;
+    if(bar_coords.first+play_bar.x()+0.075<=20)
+        bar_coords.first+=0.075;
 }
 void game_field::check_bound_l(){
-    if(bar_coords.first-play_bar.x()-0.5>=0)
-        bar_coords.first-=0.5;
+    if(bar_coords.first-play_bar.x()-0.075>=0)
+        bar_coords.first-=0.075;
 }
 void game_field::check_bound_u(){
-    if(play_bar.y()+0.5>=4)
+    if(play_bar.y()+0.05>=2)
         return;
-    play_bar.x(sqrt( pow(play_bar.x(),2) - play_bar.y() - 0.25));
+    play_bar.x(sqrt( pow(play_bar.x(),2) -0.1* play_bar.y() - 0.0025));
     if(bar_coords.first-play_bar.x()<0)
         bar_coords.first=play_bar.x();
     if(bar_coords.first+play_bar.x()>30)
         bar_coords.first=30-play_bar.x();
     
-    play_bar.y(play_bar.y()+0.5);
+    play_bar.y(play_bar.y()+0.05);
 
 }
 void game_field::check_bound_d(){
-    if(play_bar.y()-0.5<=(-4))
+    if(play_bar.y()-0.05<=(-2))
         return;
-    play_bar.x(sqrt( pow(play_bar.x(),2) + 1*play_bar.y() - 0.25));
+    play_bar.x(sqrt( pow(play_bar.x(),2) + 0.1*play_bar.y() - 0.0025));
     if(bar_coords.first-play_bar.x()<0)
         bar_coords.first=play_bar.x();
         if(bar_coords.first+play_bar.x()>30)
         bar_coords.first=30-play_bar.x();
-    play_bar.y(play_bar.y()-0.5);    
+    play_bar.y(play_bar.y()-0.05);    
 }
         
 
@@ -71,19 +70,20 @@ void game_field::draw(){
         }
     }
     return;
-    std::cout<<"x: "<<ball_coords.first << " y: "<< ball_coords.second<<"\n";
+
 }
 
 
 void game_field::move_ball(){
     float end_x=play_ball.vel_x()+ball_coords.first, end_y=play_ball.vel_y()+ball_coords.second;
     float start_x=ball_coords.first, start_y=ball_coords.second;
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    
     if(end_y>=26 || ball_coords.second>=26)
         impact_brick(end_x, end_y);
     if((start_x!=ball_coords.first)||(start_y!=ball_coords.second))
         return;
-    bar_impact(end_x, end_y);
+    if(end_y<=6 || ball_coords.second<=6)
+        bar_impact(end_x, end_y);
     if((start_x!=ball_coords.first)||(start_y!=ball_coords.second))
         return;
     border_impact(end_x, end_y);
@@ -94,7 +94,7 @@ void game_field::move_ball(){
         ball_coords.first=10;
         ball_coords.second=10;
         play_ball.vel_x(0.001);
-        play_ball.vel_y(0.1);
+        play_ball.vel_y(0.15);
         return;
     }
     ball_coords.first=end_x;
@@ -104,11 +104,31 @@ void game_field::move_ball(){
 void game_field::bar_impact(float bx, float by){
     std::pair<float, float>* line_eq=compute_line_equation(ball_coords.first, ball_coords.second, bx, by );
     std::pair<float, float>* bar_eq=compute_line_equation(bar_coords.first-play_bar.x(), bar_coords.second-play_bar.y(), bar_coords.first+play_bar.x(), bar_coords.second+play_bar.y());
-    float x_impact=(bar_eq->second-line_eq->second)/(line_eq->first- bar_eq->first);
-    float y_impact=x_impact*line_eq->first+line_eq->second;
-    if(!check_boundaries(bx, ball_coords.first, by, ball_coords.second, bar_coords.first-play_bar.x(), bar_coords.first+play_bar.x(), bar_coords.second-play_bar.y(), bar_coords.second+play_bar.y(), x_impact, y_impact))
+    float x_impact, y_impact;
+    
+    if(line_eq->first==0 && line_eq->second==0){
+        if(bar_eq->first==0 && bar_eq->second==0){
+            delete line_eq;
+            delete bar_eq;
+            return;
+        }
+        x_impact=ball_coords.first;
+        y_impact=x_impact*bar_eq->first + line_eq->second;
+    }
+    
+    else if(bar_eq->first==0 && bar_eq->second==0){
+        x_impact=bar_coords.first;
+        y_impact=x_impact*line_eq->first + line_eq->second;
+    }
+    else{
+        x_impact=(bar_eq->second-line_eq->second)/(line_eq->first- bar_eq->first);
+        y_impact=x_impact*line_eq->first+line_eq->second;
+    }
+    if(!check_boundaries(bx, ball_coords.first, by, ball_coords.second, bar_coords.first-play_bar.x(), bar_coords.first+play_bar.x(), bar_coords.second-play_bar.y(), bar_coords.second+play_bar.y(), x_impact, y_impact)){
+        delete line_eq;
+        delete bar_eq;
         return;
-
+    }
 
     //new speeds computation    
     float bar_dim;
@@ -117,12 +137,12 @@ void game_field::bar_impact(float bx, float by){
 	float left_y= bar_coords.second-play_bar.y();
     float right_y= bar_coords.second+play_bar.y();
     bar_dim=compute_cartesian_distance(left_x, right_x, left_y, right_y);
-	float alpha, beta, gamma;
+	float  beta;
 	
 		//alpha=asin( sqrt( pow((compute_cartesian_distance(start_x, end_x, start_y, end_y)/(start_y-end_y) ), 2)));
 
 	
-		beta=-asin((right_y-left_y)/bar_dim);
+	beta=-asin((right_y-left_y)/bar_dim);
 
     //Rotate ball point, impact point and ball speeds
     float x_impact_r=rotate_x(x_impact, y_impact, beta);
@@ -144,7 +164,9 @@ void game_field::bar_impact(float bx, float by){
     std::pair<float, float>* aux=compute_new_coords((*line_eq),(*bar_eq), ball_coords, std::pair<float, float>(x_impact, y_impact));
     ball_coords.first=aux->first;
     ball_coords.second=aux->second;
-
+    delete line_eq;
+    delete bar_eq;
+    delete aux;
 }
 
 
@@ -198,7 +220,6 @@ void game_field::impact_brick(float bx, float by){
     cand->hit();
     if(!cand->get_alive()){
         //update hittable brick structure
-        std::cout<<"brick_destroyed\n";
         bricks--;
         int i=0;
         for(int j=0; j<int(hittable_bricks.size()) && hittable_bricks[j].second!=cand; j++){i++;}
@@ -209,7 +230,6 @@ void game_field::impact_brick(float bx, float by){
                         wall[x][y]->can_hit(true); 
                         std::pair<float, float>brick_indexes(x, y);             
                         hittable_bricks.push_back(std::pair<std::pair<float, float>, brick* >(brick_indexes, wall[x][y]));
-                        std::cout<<"added_brick"<<x<<y<<"\n";
                     }
                 }
             }
@@ -272,6 +292,7 @@ void game_field::border_impact(float bx, float by){
         ball_coords.first=x_impact;
         ball_coords.second=y_impact;
     }
+    delete line_eq;
     return;
 }
 
@@ -292,12 +313,57 @@ std::pair<float, float>* game_field::compute_line_equation(float ax, float ay, f
 }
 
 bool game_field::check_boundaries(float end_x_ball, float start_x_ball, float end_y_ball, float start_y_ball, float line_end_x, float line_start_x, float line_end_y, float line_start_y, float impact_x, float impact_y ){
-	bool aux_x=false, aux_y=false;
+	/*bool aux_x=false, aux_y=false;
 	aux_x=( (impact_x>=start_x_ball && impact_x<=end_x_ball)|| (impact_x<=start_x_ball && impact_x>=end_x_ball) ) && ( (impact_x>=line_start_x && impact_x<=line_end_x)|| (impact_x<=line_start_x && impact_x>=line_end_x) )  ;
 	if(!aux_x)
 		return false;
 	aux_y=( (impact_y>=start_y_ball && impact_y<=end_y_ball)|| (impact_y<=start_y_ball && impact_y>=end_y_ball) ) && ( (impact_y>=line_start_y && impact_y<=line_end_y)|| (impact_y<=line_start_y && impact_y>=line_end_y) )  ;
-	return aux_x && aux_y;
+	return aux_x && aux_y;*/
+
+    float x_min, x_max, y_min, y_max, aux;
+    if(start_x_ball>end_x_ball){
+        aux=end_x_ball;
+        end_x_ball=start_x_ball;
+        start_x_ball=aux;
+    }
+    if(end_y_ball<start_y_ball){
+        aux=end_y_ball;
+        end_y_ball=start_y_ball;
+        start_y_ball=aux;
+    }
+
+    if(line_end_x<line_start_x){
+        aux=line_end_x;
+        line_end_x=line_start_x;
+        line_start_x=aux;
+    }
+
+    if(line_end_y<line_start_y){
+        aux=line_end_y;
+        line_end_y=line_start_y;
+        line_start_y=aux;
+    }
+
+    if(line_start_x>start_x_ball)
+        x_min=line_start_x;
+    else
+        x_min=start_x_ball;
+    
+    if(line_end_x>end_x_ball)
+        x_max=end_x_ball;
+    else
+        x_max=line_end_x;
+
+    if(line_start_y>start_y_ball)
+        y_min=line_start_y;
+    else
+        y_min=start_y_ball;
+    
+    if(line_end_y>end_y_ball)
+        y_max=end_y_ball;
+    else
+        y_max=line_end_y;
+    return(impact_x>=x_min && impact_x<=x_max && impact_y>=y_min && impact_y<=y_max );
 }
 
 
@@ -316,7 +382,7 @@ std::pair<float,float>* game_field::compute_new_coords(std::pair<float, float> b
 	}
 
 	//case:horizontal impact line
-	if(line_coefficients.first==0){
+	else if(line_coefficients.first==0){
 		if(start_point.second<impact_point_coords.second || impact_point_coords.second==100)
 			result->second=impact_point_coords.second - play_ball.get_radius();
 		else

@@ -11,7 +11,7 @@
         void draw(bar* elem, float coord_x, float coord_y);
         void prepare_for_update(){ofClear(0,0,0);}
         void setup_draw();
-        void endgame_draw();
+        void endgame_draw(bool victory);
         void draw_gamefield(int lives);
     }
     ;

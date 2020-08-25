@@ -6,9 +6,8 @@ endif
 
 # make sure the the OF_ROOT location is defined
 ifndef OF_ROOT
-    OF_ROOT= /home/osboxes/openframeworks/of_v0.11.0_linux64gcc6_release
-	#$(realpath ../..)
+    OF_ROOT= #$(realpath ../..)
 endif
 
 # call the project makefile!
-include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
+include $(OF_ROOT)/#location of the openframeworks makefile

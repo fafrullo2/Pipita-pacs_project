@@ -45,7 +45,7 @@ class game_field{
         game_field(){
             for(int x=0; x< 10; x++){
                 for(int y=0; y<4; y++){
-                    wall[x][y]=new brick(rand() %4);
+                    wall[x][y]=new brick(rand() %3 + 1);
                     if(y==3){
                         hittable_bricks.push_back(std::pair<std::pair<float, float>, brick*>(std::pair<float, float>(x, y), wall[x][y]));
                         wall[x][y]->can_hit(true);
@@ -63,7 +63,7 @@ class game_field{
             paint->setup_draw();
         }
         void draw_endgame(){
-            paint->endgame_draw();
+            paint->endgame_draw(live>0);
         }
 };
 

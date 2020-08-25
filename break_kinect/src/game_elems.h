@@ -1,9 +1,11 @@
 #ifndef BAR_H
 #define BAR_H
 
+
 class bar{
     private:
-        float x_comp=5, y_comp=0;
+        float x_comp=2.5, y_comp=0;
+        
     public:
         bar(){}
         float x(){return x_comp;}
@@ -21,7 +23,7 @@ class bar{
 
 class ball{
     private:
-        float vel_x_value=0.001, vel_y_value=0.1, radius_of_ball=0.05;
+        float vel_x_value=0.001, vel_y_value=0.15, radius_of_ball=0.05;
     public:
         ball(){}
         float vel_x(){return vel_x_value;}

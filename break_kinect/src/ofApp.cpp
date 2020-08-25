@@ -8,7 +8,7 @@ void ofApp::setup(){
     camera.setCameraTiltAngle(0);
     camera.init();
     camera.open();
-    camera.setDepthClipping(500, 650);
+    camera.setDepthClipping(1000, 1150);
     ofBackground(0,0,0);
 }
 
@@ -17,16 +17,15 @@ void ofApp::update(){
     camera.update();
     if(setup__var){}
     else if(field->lives()>0 && field->bricks_alive() && !setup__var ){
-        update_cycle++;
-        if(update_cycle==5){
-            update_cycle=0;
+        if(update_cycle==true){
+            update_cycle=false;
             float xpos=0, ypos=0, depth=0;
             int counter=0;
             
-            for(int x=0; x<camera.getWidth();x=x+3){
-                for (int y=0;y<camera.getHeight(); y=y+3){
-                    depth=camera.getDistanceAt(x,y);
-                    if(depth>=500 && depth<= 650){
+            for(int x=0; x<camera.getWidth();x=x+5){
+                for (int y=0;y<camera.getHeight(); y=y+5){
+                   depth=camera.getDistanceAt(x,y);
+                    if(depth>=1000 && depth<= 1150){
                         xpos+=x;
                         ypos+=y;
                         counter++;
@@ -36,7 +35,6 @@ void ofApp::update(){
             xpos=xpos/counter;
             ypos=ypos/counter;
             //ofDrawCircle(xpos+300, 500-ypos, 6);
-            camera.drawDepth(300, 0);
             if(xpos>(camera.getWidth()/2 + camera.getWidth()/10))
                 field->check_bound_l();
             if(xpos<(camera.getWidth()/2 - camera.getWidth()/10))
@@ -46,7 +44,12 @@ void ofApp::update(){
             if(ypos<(camera.getHeight()/2 - camera.getHeight()/10))
                 field->check_bound_u();
         }
-    field->move_ball();    
+    else{
+        field->move_ball();
+        update_cycle=true;
+        //std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }  
+          
     }
         
     else{
@@ -54,11 +57,16 @@ void ofApp::update(){
         if( play_again && chose){
             delete field;
             field= new game_field();
+            endgame=false;
+            setup__var=false;
+            play_again=false;
+            chose=false;
         }
-        else if(chose) {
-        delete field;
-        camera.close();
-        ofExit();
+        else if(chose && !play_again) {
+            delete field;
+            camera.close();
+            ofBaseApp::exit();
+            ofExit();
         }
         return;
     }
