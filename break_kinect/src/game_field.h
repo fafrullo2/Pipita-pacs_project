@@ -30,7 +30,7 @@ class game_field{
         bool check_boundaries(float end_x_ball, float start_x_ball, float end_y_ball, float start_y_ball, float line_end_x, float line_start_x, float line_end_y, float line_start_y, float impact_x, float impact_y );
         float rotate_x(float x_comp, float y_comp, float alpha);
         float rotate_y(float x_comp, float y_comp, float alpha);
-        
+        bool check_ghost_impact(float delta_x_center, float  delta_x_lenght, float delta_y_lenght );
 
     public:
         void draw();

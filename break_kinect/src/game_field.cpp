@@ -2,7 +2,38 @@
 #include <math.h>
 #include <iostream>
 
+bool game_field::check_ghost_impact(float delta_x_center, float  delta_x_lenght, float delta_y_lenght ){
+    std::pair<float, float> old_sx_rotated, old_dx_rotated ,new_sx_rotated, new_dx_rotated, old_ball_rotated, new_ball_rotated;
+    float alpha_old, alpha_new;
+    
+    alpha_old=-asin((2*play_bar.y()) /  sqrt(pow(2*play_bar.y(),2)+pow(2*play_bar.x(),2) ));
+    alpha_new=-asin((2*(play_bar.y()+delta_y_lenght)) /  sqrt(pow(2*(play_bar.y()),2)+pow(2*play_bar.x(),2) ));
+    
+    old_sx_rotated.first= rotate_x(bar_coords.first-play_bar.x() , bar_coords.first-play_bar.y() , alpha_old);
+    old_sx_rotated.second= rotate_y(bar_coords.first-play_bar.x() , bar_coords.first-play_bar.y() , alpha_old);
+    old_dx_rotated.first= rotate_x(bar_coords.first+play_bar.x() , bar_coords.first+play_bar.y() , alpha_old);
+    old_dx_rotated.second= rotate_y(bar_coords.first+play_bar.x() , bar_coords.first+play_bar.y() , alpha_old);
+    
+    new_sx_rotated.first= rotate_x(bar_coords.first-play_bar.x() +delta_x_center +delta_x_lenght , bar_coords.first-play_bar.y()+delta_y_lenght , alpha_new);
+    new_sx_rotated.second= rotate_y(bar_coords.first-play_bar.x() +delta_x_center +delta_x_lenght, bar_coords.first-play_bar.y() +delta_y_lenght, alpha_new);
+    new_dx_rotated.first= rotate_x(bar_coords.first+play_bar.x() +delta_x_center +delta_x_lenght, bar_coords.first+play_bar.y() +delta_y_lenght, alpha_new);
+    new_dx_rotated.second= rotate_y(bar_coords.first+play_bar.x() +delta_x_center +delta_x_lenght, bar_coords.first+play_bar.y() +delta_y_lenght, alpha_new);
 
+    old_ball_rotated.first=rotate_x(ball_coords.first, ball_coords.second, alpha_old);
+    old_ball_rotated.second=rotate_y(ball_coords.first, ball_coords.second, alpha_old);
+    
+    new_ball_rotated.first=rotate_x(ball_coords.first+play_ball.vel_x(), ball_coords.second+play_ball.vel_y(), alpha_new);
+    new_ball_rotated.second=rotate_y(ball_coords.first+play_ball.vel_x(), ball_coords.second+play_ball.vel_y(), alpha_new);
+
+    if(! ( old_ball_rotated.first>=old_sx_rotated.first && old_ball_rotated.first<=old_dx_rotated.first && new_ball_rotated.first>=new_sx_rotated.first && new_ball_rotated.first<=new_dx_rotated.first   ) )
+        return false;
+    bool old_above, new_above;
+    old_above=old_ball_rotated.second>=old_sx_rotated.second;
+    new_above=new_ball_rotated.second>=new_sx_rotated.second;
+    if((old_above && new_above) || (!old_above && !new_above))
+        return false;
+    return true;
+}
 
 game_field::~game_field(){
     for (int x=0; x<10; x++){
@@ -23,34 +54,49 @@ float game_field::rotate_y(float x_comp, float y_comp, float alpha){
 }
 
 void game_field::check_bound_r(){
-    if(bar_coords.first+play_bar.x()+0.075<=20)
-        bar_coords.first+=0.075;
+    if(bar_coords.first+play_bar.x()+0.075<=20){
+        if(!check_ghost_impact(0.075,0,0))
+            bar_coords.first+=0.075;
+    }
 }
 void game_field::check_bound_l(){
-    if(bar_coords.first-play_bar.x()-0.075>=0)
-        bar_coords.first-=0.075;
+    if(bar_coords.first-play_bar.x()-0.075>=0){
+        if(!check_ghost_impact(-0.075,0,0))
+            bar_coords.first-=0.075;
+    }
 }
 void game_field::check_bound_u(){
     if(play_bar.y()+0.05>=2)
         return;
-    play_bar.x(sqrt( pow(play_bar.x(),2) -0.1* play_bar.y() - 0.0025));
-    if(bar_coords.first-play_bar.x()<0)
-        bar_coords.first=play_bar.x();
-    if(bar_coords.first+play_bar.x()>30)
-        bar_coords.first=30-play_bar.x();
-    
+    float new_x_coord=bar_coords.first;
+    float new_x_comp=(sqrt( pow(play_bar.x(),2) -0.1* play_bar.y() - 0.0025));
+    if(bar_coords.first-new_x_comp<0)
+        new_x_coord=new_x_comp;
+    if(bar_coords.first+new_x_comp>20)
+        new_x_coord=20-new_x_comp;
+    if(check_ghost_impact(bar_coords.first-new_x_coord,play_bar.x()-new_x_comp, 0.05 ))
+        return;
+    bar_coords.first=new_x_coord;
+    play_bar.x(new_x_comp);
     play_bar.y(play_bar.y()+0.05);
 
 }
 void game_field::check_bound_d(){
-    if(play_bar.y()-0.05<=(-2))
+    if(play_bar.y()+0.05<=(-2))
         return;
-    play_bar.x(sqrt( pow(play_bar.x(),2) + 0.1*play_bar.y() - 0.0025));
-    if(bar_coords.first-play_bar.x()<0)
-        bar_coords.first=play_bar.x();
-        if(bar_coords.first+play_bar.x()>30)
-        bar_coords.first=30-play_bar.x();
-    play_bar.y(play_bar.y()-0.05);    
+    float new_x_coord=bar_coords.first;
+    float new_x_comp=(sqrt( pow(play_bar.x(),2) +0.1* play_bar.y() - 0.0025));
+    if(bar_coords.first-new_x_comp<0)
+        new_x_coord=new_x_comp;
+    if(bar_coords.first+new_x_comp>20)
+        new_x_coord=20-new_x_comp;
+    if(check_ghost_impact(bar_coords.first-new_x_coord,play_bar.x()-new_x_comp, -0.05 ))
+        return;
+    bar_coords.first=new_x_coord;
+    play_bar.x(new_x_comp);
+    play_bar.y(play_bar.y()-0.05);
+
+   
 }
         
 
@@ -59,7 +105,7 @@ void game_field::check_bound_d(){
 
 
 void game_field::draw(){
-    paint->prepare_for_update();
+    //paint->prepare_for_update();
     paint->draw_gamefield(live);
     paint->draw(&play_ball, ball_coords.first, ball_coords.second);
     paint->draw(&play_bar, bar_coords.first, bar_coords.second);

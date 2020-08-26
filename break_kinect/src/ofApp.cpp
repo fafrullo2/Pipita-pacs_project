@@ -19,8 +19,8 @@ void ofApp::update(){
     else if(field->lives()>0 && field->bricks_alive() && !setup__var ){
         if(update_cycle==true){
             update_cycle=false;
-            float xpos=0, ypos=0, depth=0;
-            int counter=0;
+            double xpos=0, ypos=0, depth=0;
+            long int counter=0;
             
             for(int x=0; x<camera.getWidth();x=x+5){
                 for (int y=0;y<camera.getHeight(); y=y+5){

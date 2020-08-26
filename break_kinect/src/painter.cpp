@@ -40,6 +40,12 @@ void painter::draw_gamefield(int lives){
 void painter::setup_draw(){
     ofSetColor(255, 255, 255);
     ofDrawBitmapString("Use Up and Down keys on your keyboard \nto set the kinect angle.\nIn the game you will move the bar left \nand right by moving your hand left or right.\nMove your hand up to rotate the bar anti-clockwise,\ndown to rotate it clockwise.\nDon't let the ball hit the red line!\nPress Right when you are ready to start", 0, 10);
+    ofSetColor(0,255,0);
+    ofDrawLine(200,192 , 840,192 );
+    ofDrawLine(200,288 , 840,288 );
+    ofDrawLine(456,0, 456, 480 );
+    ofDrawLine(584,0, 584, 480 );
+    ofSetColor(0,0,255);
 }
 void painter::endgame_draw(bool victory){
     if(victory){
