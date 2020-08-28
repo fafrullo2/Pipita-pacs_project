@@ -1,12 +1,15 @@
 \documentclass[]{article}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
+
 \graphicspath{{./latex_imgs/}}
 
 
 %opening
-\title{APCS project, A.Y. 2019-2020\\Project proposal \#50:"Development of an interactive 2D application with  OpenFrameworks"}
+\title{\includegraphics[scale=0.5]{logo.png} APCS project, A.Y. 2019-2020\\Project proposal \#50:"Development of an interactive 2D application with  OpenFrameworks"}
 \author{Antonio Pipita}
+
+
 
 \begin{document}
 
@@ -62,11 +65,11 @@ The application works in three different phases:
 This section contains the class diagram and a description of the attributes and methods of each class
 \begin{figure}[h!]
     \centering
-    \includegraphics[angle=90, scale=0.25]{calss_diagram_mod.jpg}
+    \includegraphics[angle=90, scale=0.25]{calss_diagram.jpg}
     \caption{The class diagram of the application}
     \label{fig:Class diagram}
 \end{figure}
-
+The main.cpp file will not have a dedicated section, since its only use is to create anew instance of ofApp, execute an action aimed at setting up the application window and starting the actual application.\\
 \subsection{ofApp}
 The ofApp class acts as controller, extends ofBaseApp and is the class upon which the framework provided by OF acts, thus controlling the applicaiton execution.
 \begin{figure}[h!]
@@ -97,6 +100,8 @@ All of the following methods are public
 				\item Game phase: asks the model to update the bar state according to the player's input and to update the playfield state according to the rules of the playfield.
 				\item Endgame phase: waits to the player's deccision to either exit the game or to play another round; then enforces that decision.
 			 \end{itemize}
+			 It is worth noting that this method also regulates the game speed: if the updates were too quick that would result in the game speed being too high, thus a check is performed to make sure they take at least 20ms.\\
+			 If they take less, the thread will be paused for the difference between the update execution time and 20 ms.
 		\item draw():void \\ Method used to update the graphic representation of the game state, mostly by communicating to the model that it's time to do so. Its behaviour changes according to the game state:
 			 \begin{itemize}
 				 \item Setup phase: tells the model to print the setup information and provides the Kinect's depth view feed.
@@ -206,12 +211,33 @@ All of the class attributes are private
 		\item y(float val):void\\y\_comp setter.
 	\end{itemize}
 \newpage
+\subsection{cartesian\_operator}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[ scale=0.5]{cartesian.jpg}
+    \caption{The cartesian\_operator class}
+    \label{fig:cartesian_operator diagram }
+\end{figure}
+This class is used to perform cartesian computations tha don't involve directly data of the objects of the game (bar, ball, bricks)
+\subsubsection{Methods}
+All methods are public
+\begin{itemize}
+	\item rotate\_x(float x\_comp, float y\_comp, float alpha):float \\This method executes a rotation of alpha degrees on the x coordinates.
+	\item rotate\_y(float x\_comp, float y\_comp, float alpha):float\\This method executes a rotation of alpha degrees on the y coordinates.
+	\item compute\_cartesian\_distance(float ax, float ay, float bx, float by):float\\This method computes the cartesian distance betweeen two points.
+	\item check\_boundaries(float end\_x\_ball, float start\_x\_ball, float end\_y\_ball, float start\_y\_ball, float line\_end\_x, float line\_start\_x, float line\_end\_y, float line\_start\_y, float impact\_x, float impact\_y ):bool \\ Given the points defining 2 segments, the lines to which they lay on and the impact point between the two lines this method computes wether the impact point is within the boundaries of the segments. 
+	\item compute\_line\_equation(float ax, float ay, float bx, float by):std::pair$<$float,float$>$*\\Given two points this method will compute the coefficient and the known term of the line defined by those two points. Note that if the line is parallel to the y axis, the result returned will be (0,0). This doesn't lead to errors since, as the system has been built, the only time that a line of equation y=0 can be addressed is treated separetly in the method move\_ball(). 
+	\item bool point\_between\_lines(std::pair$<$float, float$>$ point, std::pair$<$float, float$>$* line\_one, std::pair$<$float, float$>$* line\_two)\\This method, given a point and two lines, returns true if the point is situated between the two lines.
+    \item float max(float a, float b)\\Given two numbers returns the maximum
+    \item float min(float a, float b)\\Given two numbers returns the minimum
+\end{itemize}
+\newpage
 \subsection{Game$\_$field}
 \begin{figure}[h!]
     \centering
-    \includegraphics[angle=90, scale=0.5]{game_field.jpg}
+    \includegraphics[scale=0.5]{game_field.jpg}
     \caption{The game\_field class}
-    \label{fig:painter game_field diagram }
+    \label{fig:game_field diagram }
 \end{figure}
 This class contains all the game object and the rules for their updates and interaction
 \subsubsection{Attributes}
@@ -232,15 +258,10 @@ All of the class attributes are private
 	\paragraph{Private methods}
 	\begin{itemize}
 	\item impact\_brick(float bx, float by):void\\ This function is called to check wether the ball will hit any brick with its next movement. If it is so, ball coordinates and speed components will be updated accordingly, the brick will be hit and, if destroyed, the data structures will be updated accordingly.
-	\item compute\_line\_equation(float ax, float ay, float bx, float by):std::pair$<$float,float$>$*\\Given two points this method will compute the coefficient and the known term of the line defined by those two points. Note that if the line is parallel to the y axis, the result returned will be (0,0). This doesn't lead to errors since, as the system has been built, the only time that a line of equation y=0 can be addressed is treated separetly in the method move\_ball(). .
 	\item border\_impact(float bx, float by):void \\This method checks if, with the next movement, the ball will impact the sides or the ceiling of the playflield. If it is so, ball coordinates and speed component are updated accordingly.
 	\item bar\_impact(float bx, float by):void \\This method checks if, with the next movement, the ball will impact with the bar. If it is so, the ball coordinates and speed components are updated accordingly.
 	\item compute\_new\_coords(std::pair$<$float, float$>$ ball\_coefficients, std::pair$<$float, float$>$ line\_coefficients, std::pair$<$float, float$>$ start\_point, std::pair$<$float, float$>$ impact\_point\_coords )std::pair$<$float,float$>$*\\Given the line along which the ball moves, the line upon which the bar resides, the ball start point and the computed impact point this method computes the new coordinates of the ball.
 	\item impact\_point(float coeff\_ball, float known\_term\_ball, float coeff\_line, float known\_term\_line, std::pair$<$float, float$>$* result):void \\Given the bar line and the ball line this method computes the impact point between the two lines.
-	\item compute\_cartesian\_distance(float ax, float ay, float bx, float by):float\\This method computes the cartesian distance betweeen two points.
-	\item check\_boundaries(float end\_x\_ball, float start\_x\_ball, float end\_y\_ball, float start\_y\_ball, float line\_end\_x, float line\_start\_x, float line\_end\_y, float line\_start\_y, float impact\_x, float impact\_y ):bool \\ Given the points defining 2 segments, the lines to which they lay on and the impact point between the two lines this method computes wether the impact point is within the boundaries of the segments. 
-	\item rotate\_x(float x\_comp, float y\_comp, float alpha):float \\This method executes a rotation of alpha degrees on the x coordinates.
-	\item rotate\_y(float x\_comp, float y\_comp, float alpha):float\\This method executes a rotation of alpha degrees on the y coordinates.
 	\item check\_ghost\_impact(float delta\_x\_center, float  delta\_x\_lenght, float delta\_y\_lenght ):bool \\This method checks wether the bar will skip over the ball with its next movement. If it is so the method returns true.
 	\end{itemize}
 

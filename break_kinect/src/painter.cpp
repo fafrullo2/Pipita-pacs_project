@@ -37,7 +37,7 @@ void painter::draw_gamefield(int lives){
 }
 
 
-void painter::setup_draw(){
+void painter::setup_draw(){ //setup phase
     ofSetColor(255, 255, 255);
     ofDrawBitmapString("Use Up and Down keys on your keyboard \nto set the kinect angle.\nIn the game you will move the bar left \nand right by moving your hand left or right.\nMove your hand up to rotate the bar anti-clockwise,\ndown to rotate it clockwise.\nDon't let the ball hit the red line!\nPress Right when you are ready to start", 0, 10);
     ofSetColor(0,255,0);
@@ -47,7 +47,7 @@ void painter::setup_draw(){
     ofDrawLine(584,0, 584, 480 );
     ofSetColor(0,0,255);
 }
-void painter::endgame_draw(bool victory){
+void painter::endgame_draw(bool victory){ //endgame phase 
     if(victory){
         ofSetColor(0, 0, 255);
         ofDrawBitmapString("You won!!!", 50, 10);
@@ -62,7 +62,7 @@ void painter::endgame_draw(bool victory){
 }
 
 
-void painter::draw(brick* elem, float coord_x, float coord_y){
+void painter::draw(brick* elem, float coord_x, float coord_y){ //draw a brick
 
     if(elem->get_type()<=0)
         return;
@@ -98,13 +98,13 @@ void painter::draw(brick* elem, float coord_x, float coord_y){
 }
 
 
-void painter::draw(ball* elem, float coord_x, float coord_y){
+void painter::draw(ball* elem, float coord_x, float coord_y){ //draw the ball
     ofSetColor(255,255,255);
     ofDrawCircle((coord_x)*scale+x_offset, y_offset-(coord_y)*scale, (elem->get_radius()-0) *scale);
     return;
 }
 
-void painter::draw(bar* elem, float coord_x, float coord_y){
+void painter::draw(bar* elem, float coord_x, float coord_y){ //draw the bar
     ofSetColor(255, 255, 255);
     ofDrawLine((coord_x-elem->x())*scale+x_offset,y_offset-(coord_y-elem->y())*scale, (coord_x+elem->x())*scale+x_offset,y_offset-(coord_y+elem->y())*scale);
     return;
