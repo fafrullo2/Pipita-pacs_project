@@ -15,7 +15,7 @@ All levels are generated randomly. Further informations on how to play are provi
 In order for the application to work openframeworks is needed, as well as the ofxKinect addon (https://openframeworks.cc/), follow the instruction provided in the website to install it.
 In order for ofxKinect to work the libraries and drivers provided by Openkinect (https://openkinect.org/wiki/Getting_Started) are required.
 
-Once openframeworks and the needed drivers have been installed, place the brake_kinect folder inside the "apps" directory in the openframewoks folder. In order to be able to compile the sources modify the makefile as indicated in the makefile itself.
+Once openframeworks and the needed drivers have been installed, in order to be able to compile the sources modify the makefile as indicated in the makefile itself.
 
 In order to compile the sources open the directory in a terminal and execute the command "sudo make". If sudo is missing openframeworks will not be able to create the needed folders.
 

@@ -354,7 +354,7 @@ Painter will display a different message according to wether the player has won 
 \section{User manual}
 \subsection{Setup}
 In order for the application to work OF is needed, as well as the OpenKinect libraries. The RADME file contains the links to their webpage, but a quick search on internet should get you there as well.\\
-Once you have downloaded the repository from git, you need to move the application folder in the apps directory in the openframeworks folder, open the makefile and follow the instructions.\\
+Once you have downloaded the repository from git, modify the Makefile by expliciting the rocation of the root folder of OF and the the path to the default OF makefile. The latter one is present as a comment in the project Makefile as a comment, if you followed the standard install procedure should work just fine.\\  
 Open then the directory containing the makefile in a terminal and type "sudo make" to compile the release version. The sudo command is needed, otherwise it won't be possible to create the needed folders.\\
 Once you have compiled the code, type "make RunRelease" to start the application (note that the command is case sensitive).
 \subsection{Playing the game}

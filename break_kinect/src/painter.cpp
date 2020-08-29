@@ -39,7 +39,7 @@ void painter::draw_gamefield(int lives){
 
 void painter::setup_draw(){ //setup phase
     ofSetColor(255, 255, 255);
-    ofDrawBitmapString("Use Up and Down keys on your keyboard \nto set the kinect angle.\nIn the game you will move the bar left \nand right by moving your hand left or right.\nMove your hand up to rotate the bar anti-clockwise,\ndown to rotate it clockwise.\nDon't let the ball hit the red line!\nPress Right when you are ready to start", 0, 10);
+    ofDrawBitmapString("Use Up and Down keys on your keyboard \nto set the kinect angle.\nIn the game you will move the bar left \nand right by moving your hand left or right.\nMove your hand up to rotate the bar anti-clockwise,\ndown to rotate it clockwise.\nDon't let the ball hit the red line!\nPress Right when you are ready to start\nNote that the Kinect will only track \nobjects between 1m and 1.15m, so position\nyourself at a distance such that only your hand are \nvisible on screen.", 0, 10);
     ofSetColor(0,255,0);
     ofDrawLine(200,192 , 840,192 );
     ofDrawLine(200,288 , 840,288 );
