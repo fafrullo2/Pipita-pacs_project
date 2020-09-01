@@ -76,7 +76,7 @@ void game_field::check_bound_l(){
 //checks if the update doesn't skip over the ball and if it is possible at all.
 //if it is possible, applies changes
 void game_field::check_bound_u(){
-    if(play_bar.y()+0.05>=2)
+    if(play_bar.y()+0.05>=1)
         return;
     float new_x_coord=bar_coords.first;
     float new_x_comp=(sqrt( pow(play_bar.x(),2) -0.1* play_bar.y() - 0.0025));
@@ -94,7 +94,7 @@ void game_field::check_bound_u(){
 //checks if the update doesn't skip over the ball and if it is possible at all.
 //if it is possible, applies changes
 void game_field::check_bound_d(){ 
-    if(play_bar.y()-0.05<=(-2))   
+    if(play_bar.y()-0.05<=(-1))   
         return;
     float new_x_coord=bar_coords.first;
     float new_x_comp=(sqrt( pow(play_bar.x(),2) +0.1* play_bar.y() - 0.0025));
