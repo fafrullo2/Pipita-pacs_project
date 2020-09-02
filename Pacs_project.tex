@@ -57,7 +57,7 @@ The application works in three different phases:
 \end{itemize}
 \subsection{Acronyms and conventions}
 \begin{itemize}
-	\item [OF] openframeworks
+	\item [OF] : openframeworks
 	\item [gameboard] : refers to the space in which the ball moves, the elements on it and the rules relative to the interaction between objects.
 \end{itemize}
 \newpage
@@ -117,7 +117,7 @@ All of the following methods are public. Note that only the overloaded methods h
 			 \end{itemize}
 	\end{itemize}
 \newpage
-\subsection{Painter}
+\subsection{painter}
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{painter.jpg}
@@ -137,7 +137,7 @@ This class is used to print to the screen the gameboard state representation and
 	\end{itemize}
 It is worth noting that, while this class does not have any attribute, it presents hoever some global variables (situated in the .cpp file) used for the visual representation coordinates computation.
 \newpage
-\subsection{Brick}
+\subsection{brick}
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{brick.jpg}
@@ -163,7 +163,7 @@ All of the class methods are public
 	\item brick():brick\\Default constructor.
 	\item brick(int t):brick\\Constructor that sets the type to t.
 \end{itemize}
-\subsection{Ball}
+\subsection{ball}
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{ball.jpg}
@@ -189,7 +189,7 @@ All of the class attributes are private
 		\item radius(float val):void \\ radius\_of\_ball setter.
 	\end{itemize}
 
-\subsection{Bar}
+\subsection{bar}
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{bar.jpg}
@@ -233,7 +233,7 @@ All methods are public
     \item float min(float a, float b)\\Given two numbers returns the minimum
 \end{itemize}
 \newpage
-\subsection{Game$\_$field}
+\subsection{game$\_$field}
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.5]{game_field.jpg}
@@ -249,7 +249,7 @@ All of the class attributes are private
 		\item ball: play\_ball \\Ball class instance.
 		\item std::pair$<$float, float$>$: ball\_coords\\Coordinates of the ball.
 		\item bar: play\_bar\\Bar class instance.
-		\item std::pair$<$float, float$>$: bar\_coords\\coordinates of the center of the bar.
+		\item std::pair$<$float, float$>$: bar\_coords\\Coordinates of the center of the bar.
 		\item painter*: paint \\ Pointer to a painter class instance, grants the possibility to represent data via the view.
 		\item brick*: wall[ ][ ] \\Bidimensional matrix of references to the bricks on the gameboard.
 		\item std::vector$<$std::pair$<$std::pair$<$float, float$>$, brick*$>$$>$: hittable\_bricks \\ A vector of pairs whose first element are the indexes of the brick in the wall matrix and the second element is a pointer to said brick. This structure is used to represent the bricks that can be reached by the ball.
@@ -261,7 +261,7 @@ All of the class attributes are private
 	\item impact\_brick(float bx, float by):void\\ This function is called to check whether the ball will hit any brick with its next movement. If it is so, ball coordinates and speed components will be updated accordingly, the brick will be hit and, if destroyed, the data structures will be updated accordingly.
 	\item border\_impact(float bx, float by):void \\This method checks if, with the next movement, the ball will impact the sides or the ceiling of the playflield. If it is so, ball coordinates and speed component are updated accordingly.
 	\item bar\_impact(float bx, float by):void \\This method checks if, with the next movement, the ball will impact with the bar. If it is so, the ball coordinates and speed components are updated accordingly.
-	\item compute\_new\_coords(std::pair$<$float, float$>$ ball\_coefficients, std::pair$<$float, float$>$ line\_coefficients, std::pair$<$float, float$>$ start\_point, std::pair$<$float, float$>$ impact\_point\_coords )std::pair$<$float,float$>$*\\Given the line along which the ball moves, the line upon which the bar resides, the ball start point and the computed impact point this method computes the new coordinates of the ball.
+	\item compute\_new\_coords(std::pair$<$float, float$>$ ball\_coefficients, std::pair$<$float, float$>$ line\_coefficients, std::pair$<$float, float$>$ start\_point, std::pair$<$float, float$>$ impact\_point\_coords ):std::pair$<$float,float$>$*\\Given the line along which the ball moves, the line upon which the bar resides, the ball start point and the computed impact point this method computes the new coordinates of the ball.
 	\item impact\_point(float coeff\_ball, float known\_term\_ball, float coeff\_line, float known\_term\_line, std::pair$<$float, float$>$* result):void \\Given the bar line and the ball line this method computes the impact point between the two lines.
 	\item check\_ghost\_impact(float delta\_x\_center, float  delta\_x\_lenght, float delta\_y\_lenght ):bool \\This method checks whether the bar will skip over the ball with its next movement. If it is so the method returns true.
 	\end{itemize}
@@ -284,13 +284,13 @@ All of the class attributes are private
 	\end{itemize}
 \newpage
 \section{Application workflow}
-The application is controlled by the loop provided by OF thus entering setup() when the application starts; then the methods update and draw will alternate for the duration of the application execution time. When is time to terminate the applicationo the method ofBaseApp::exit() will be called.\\
+The application is controlled by the loop provided by OF thus entering setup() when the application starts; then the methods update and draw will alternate for the duration of the application execution time. When it is time to terminate the application the method ofBaseApp::exit() will be called.\\
 In order to understand the algorithms there are two things worth noting:
 \begin{itemize}
-	\item The area on which the game elements are positioned will be treated as a cartesian plain, with the origin at the bottom left corner, x coorddinates grow when moving to the right and y coordinates grow while moving upwards. The dimension of the field is hardcoded as 20 by 30.
+	\item The area on which the game elements are positioned will be treated as a cartesian plain, with the origin at the bottom left corner, x coordinates grow when moving to the right and y coordinates grow while moving upwards. The dimension of the field is hardcoded as 20 by 30.
 	\item Most of the times std::pair$<$float, float$>$ is used to represent points coordinates. The first element is the x coordinate and the second one is the y coordinate. 
 \end{itemize} 
-In this section will discuss the information flow and the apllication mechanisms in each of the three phases
+In this section will discuss the information flow and the application mechanisms in each of the three phases
 \subsection{Setup phase}
 As mentioned in the introduction, this is the state in whih the application starts. During this phase the player has the possibility to regulate the Kinect's angle by using the up and down arow keys. When one of these
 two keys is pressed the method ofApp::keyPressed(int key) is called and, if the new angle is lesser than 30 and greater then -30 the changes are applied to the Kinect.
@@ -322,7 +322,7 @@ The ball position are rotated accordingly, then the rotated y velocity is invert
 The new ball coordinates are then computed by finding the intersection point between the ball speed line and the line paralle to the bar line and whose distance from the bar line is equal to the bar radius.\\
 
 \paragraph{Border collision}
-If no bar hit is detected(once again by checking whether the ball has updated its coordinates), the border\_impact method is called, once again passing the computed new coorddinates as argouments.\\
+If no bar hit is detected (once again by checking whether the ball has updated its coordinates), the border\_impact method is called, once again passing the computed new coordinates as argouments.\\
 The collisions with the border are checked analizing the argouments: if the x ccoordinate is $<$0 there is an impact on the left, if it is $>$20 there is an impact on the right and if the y component is $>$30 ther's an impact on the roof. \\
 If a collision is detected the ball coordinates are updated accordingly and the speed gets modified (an impact no the left or the right prompts a x component inversion, while an impact on the roof promts a y component inversion).
 \paragraph{Life lost}
@@ -353,8 +353,8 @@ Painter will display a different message according to whether the player has won
 \newpage
 \section{User manual}
 \subsection{Setup}
-In order for the application to work OF is needed, as well as the OpenKinect libraries. The RADME file contains the links to their webpage, but a quick search on internet should get you there as well.\\
-Once you have downloaded the repository from git, modify the Makefile by expliciting the rocation of the root folder of OF and the the path to the default OF makefile. The latter one is present as a comment in the project Makefile as a comment, if you followed the standard install procedure should work just fine.\\  
+In order for the application to work OF is needed, as well as the OpenKinect libraries. The README file contains the links to their webpage, but a quick search on internet should get you there as well.\\
+Once you have downloaded the repository from git, modify the Makefile by expliciting the rocation of the root folder of OF and the the path to the default OF makefile. The latter one is present as a comment in the project Makefile, if you followed the standard install procedure should work just fine.\\  
 Open then the directory containing the makefile in a terminal and type "sudo make" to compile the release version. The sudo command is needed, otherwise it won't be possible to create the needed folders.\\
 Once you have compiled the code, type "make RunRelease" to start the application (note that the command is case sensitive).
 \subsection{Playing the game}
@@ -362,8 +362,7 @@ The Kinect will be set to only consider objects between 1 meter and 1 meter and 
 Given how the code works you can use anything that can be picked up by the Kinect sensor to play.
 
 \newpage
-\section{Final remarks}
-\subsection{References}
+\section{Resources and reference material}
 \begin{itemize}
 	\item APSC slides and material for the academic year 2019-2020
 	\item "A tour of C++", by Bjarne Stroustrup
